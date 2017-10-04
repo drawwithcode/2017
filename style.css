@@ -45,7 +45,7 @@ h1 {
     padding: 10px 10px;
     cursor: pointer;
 }
-.sketch:hover {
+.sketch:hover, .sketch.active {
     background-color: pink;
 }
 
