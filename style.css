@@ -49,10 +49,11 @@ h1 {
     background-color: pink;
 }
 
-.sketch img {
+.sketch .img {
     width: 100px;
     height: 100px;
-    /*background-color: plum;*/
+    background-color: pink;
+    background-size: cover;
 }
 
 #previous-sketch, #next-sketch {

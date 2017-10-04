@@ -131,7 +131,7 @@
 
                 let coverUrl = 'https://github.com/{{username}}/{{repository}}/raw/master/cover.png';
                 coverUrl = coverUrl.replace('{{username}}', d['github-username']).replace('{{repository}}', d['repo-01']);
-                sketch.append('img').attr('src', coverUrl)
+                sketch.append('div').attr('class','img').style('background-image', 'url('+coverUrl+')');
 
                 sketch.append('h5')
                     .text(d['surname-name']);
