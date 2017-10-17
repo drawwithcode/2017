@@ -7,13 +7,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   <title>Creative Coding PoliMi - Assignment 02</title>
-  <meta property="og:image" content="">
+  <meta property="og:image" content="https://raw.githubusercontent.com/drawwithcode/2017-assignments/master/covers/assignment-02.png">
   <meta property="og:description" content="Lesson assignment of 'Creative Coding' at Politecnico di Milano">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@densitydesign">
   <meta name="twitter:title" content="Creative Coding Polimi">
   <meta name="twitter:description" content="'Creative Coding' at Politecnico di Milano">
-  <meta name="twitter:image" content="">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/drawwithcode/2017-assignments/master/covers/assignment-02.png">
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -34,11 +34,11 @@
     <div class="container">
       <div class="row">
         <div class="page-info-500">
-          <h4>Assignment n. 02</h4>
-          <h1>Customize the "Momentum wheel"</h1>
-          <h4>4th October 2017</h4>
+          <h4 id="assignmentNumber">&nbsp;</h4>
+          <h1 id="assignmentTitle">&nbsp;</h1>
+          <h4 id="assignmentDate">&nbsp;</h4>
           <br/>
-          <p>Redraw the "Momentum wheel" using p5.js, customize it unsing the instructions lernt so far</p>
+          <p id="assignmentDescription">&nbsp;</p>
         </div>
       </div>
     </div>
@@ -61,10 +61,6 @@
   </div>
   <div class="container-fluid section-website" style="overflow-x: scroll;">
     <div id="sketches-list" class="row">
-      <!-- <div class="sketch">
-              <img src="https://github.com/iosonosempreio/test-for-github/raw/master/cover.png" />
-              <h4><a href="https://google.com">Tommaso Elli</a></h4>
-            </div> -->
     </div>
   </div>
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -77,13 +73,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.4.3/tabletop.min.js"></script>
   <script>
   // var initialElm;
+  let assignmentNumber = 2;
+  let repoName = '';
+  let selectedSketch;
 
   function update(d, i, list) {
 
     selectedSketch = i;
 
     let sketchUrl = 'https://{{username}}.github.io/{{repository}}';
-    sketchUrl = sketchUrl.replace('{{username}}', d['github-username']).replace('{{repository}}', d['repo-02']);
+    sketchUrl = sketchUrl.replace('{{username}}', d['github-username']).replace('{{repository}}', d[repoName]);
     d3.select('#sketch-container-500').attr('src', sketchUrl);
 
     d3.select('#student-name').text(d['surname-name']);
@@ -92,14 +91,13 @@
     }
 
     let repositoryUrl = 'http://github.com/{{username}}/{{repository}}';
-    repositoryUrl = repositoryUrl.replace('{{username}}', d['github-username']).replace('{{repository}}', d['repo-02']);
+    repositoryUrl = repositoryUrl.replace('{{username}}', d['github-username']).replace('{{repository}}', d[repoName]);
     d3.select('#repository-url').attr('href', repositoryUrl);
 
     if (i > 0)  {
       d3.select('#previous-sketch')
         .classed('disabled', false)
         .on('click', () => {
-          // console.log(list[i+1])
           update(list[i - 1], i - 1, list)
         })
     } else {
@@ -110,35 +108,40 @@
       d3.select('#next-sketch')
         .classed('disabled', false)
         .on('click', () => {
-          // console.log(list[i+1])
           update(list[i + 1], i + 1, list)
         })
     } else {
       d3.select('#next-sketch').classed('disabled', true);
     }
 
-    d3.selectAll('.sketch').each(function(d,i){
-      d3.select(this).classed('active',false);
+    d3.selectAll('.sketch').each(function(d, i) {
+      d3.select(this).classed('active', false);
       if (i == selectedSketch) {
         // console.log(i, this);
-        d3.select(this).classed('active',true);
+        d3.select(this).classed('active', true);
       }
     })
-
-    // console.log(d3.select('#sketches-list'));
-
   }
 
-  let selectedSketch;
+  function generatePage(data) {
 
-  function generatePage(list) {
+    //load title etc
+    let metadata = data['metadata']['elements'][assignmentNumber - 1];
+    d3.select('#assignmentNumber').text('Assignment n. ' + metadata['number']);
+    d3.select('#assignmentTitle').text(metadata['name']);
+    d3.select('#assignmentDate').text(metadata['description']);
+    repoName = metadata['repo-column'];
+
+    // generate the list of sketches
+    let list = data['assignments']['elements'].filter(function(a) { return a[repoName] != "" });
+
     if (list.length > 0) {
-      selectedSketch = 0;
+
+      selectedSketch = Math.round(Math.random()*list.length);
 
       d3.select('#sketches-list').style('width', 120 * list.length + 50 + 'px')
       // console.log(list);
       list.forEach((d, i) => {
-        // console.log(i);
         const sketch = d3.select("#sketches-list").append('div')
           .classed('sketch', true)
           .on('click', () => {
@@ -146,7 +149,7 @@
           });
 
         let coverUrl = 'https://github.com/{{username}}/{{repository}}/raw/master/cover.png';
-        coverUrl = coverUrl.replace('{{username}}', d['github-username']).replace('{{repository}}', d['repo-02']);
+        coverUrl = coverUrl.replace('{{username}}', d['github-username']).replace('{{repository}}', d[repoName]);
         sketch.append('div').attr('class', 'img').style('background-image', 'url(' + coverUrl + ')');
 
         sketch.append('h5')
@@ -179,16 +182,17 @@
       key: url,
       callback: function(data, tabletop) {
 
-        let filterData = data.filter(function(a){return a['repo-02'] != ""});
-        generatePage(filterData);
+        console.log(data);
+
+
+        generatePage(data);
       },
-      simpleSheet: true
+      simpleSheet: false
     })
   }
 
 
   init(tableKey)
-
   </script>
   <!-- Google Analytics -->
   <script>
@@ -206,7 +210,6 @@
 
   ga('create', 'UA-5816319-15', 'auto');
   ga('send', 'pageview');
-
   </script>
 </body>
 
