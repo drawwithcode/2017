@@ -80,14 +80,14 @@
 					const sketch = d3.select("#projects-list").append('p')
 					sketch.append('a')
 						.text(d['title'] + " - By " + d['students'])
-						.attr('href', 'gh-page');
+						.attr('href', d['gh-page']);
 
 					sketch.append('span')
 						.text(" / ")
 
 					sketch.append('a')
 						.text('GitHub repository')
-						.attr('href', 'repo');
+						.attr('href', d['repo']);
 				});
 			}
 		}
