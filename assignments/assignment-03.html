@@ -69,8 +69,7 @@
   <script src="../js/bootstrap.min.js"></script>
   <!-- include D3 -->
   <script src="https://d3js.org/d3.v4.min.js"></script>
-  <!-- Include Tabletop -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.4.3/tabletop.min.js"></script>
+
   <script>
   // var initialElm;
   let assignmentNumber = 3;
@@ -174,21 +173,20 @@
     }
   }
 
-  // ID of google spreadsheet
-  var tableKey = "1xtN0jroOYWKzmtNpE9ypiboiGb-s6LMDdc4p2PVWiXc";
-
-  function init(url) {
-    Tabletop.init({
-      key: url,
-      callback: function(data, tabletop) {
-        generatePage(data);
-      },
-      simpleSheet: false
+  d3.tsv("../Creative coding 2017-2018 Assignments - metadata.tsv", function(metadata) {
+    d3.tsv("../Creative coding 2017-2018 Assignments - assignments.tsv", function(assignments) {
+      let data = {
+        "metadata": {
+          "elements": metadata
+        },
+        "assignments": {
+          "elements": assignments
+        }
+      }
+      generatePage(data);
     })
-  }
+  })
 
-
-  init(tableKey)
   </script>
   <!-- Google Analytics -->
   <script>

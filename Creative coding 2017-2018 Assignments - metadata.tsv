@@ -1,0 +1,9 @@
+number	name	date	description	repo-column
+01	Create your own P5 Robot	September, 27th 2017	Create your own P5 robot	repo-01
+02	Customize the "Momentum wheel"	October, 4th 2017	Redraw the "Momentum wheel" using p5.js, customize it unsing the instructions lernt so far	repo-02
+03	Create a texture	October 11th 2017	Use the “for”, “if” statements and random values	repo-03
+04	Draw a clock	October, 18th 2017	Find your way to draw a responsive clock for your phone using the power of functions	repo-04
+05	Visual sound	October, 25th 2017 	Choose a song and use it to generate visual items. Use images as well in your sketch.	repo-05
+06	People in space	November, 8th 2017 	Load the JSON file containing data about astronauts, create small interactions with it.	repo-06
+07	Use external sources	November, 15th 2017 	Use webcam or microphone as data source for visual generation	repo-07
+08	Interact with movement	November, 22th 2017	Create interactions using the movement and position sensors of a mobile device.	repo-08
